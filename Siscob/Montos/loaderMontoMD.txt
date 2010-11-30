@@ -1,0 +1,13 @@
+LOAD DATA
+  INFILE 'montosSiscob.csv'
+  BADFILE 'montosSiscob_BAD.csv'
+  DISCARDFILE 'montosSiscob_DIS.csv'
+  TRUNCATE 
+  INTO TABLE COST_MONTOS_SISCOB
+  FIELDS TERMINATED BY "|" OPTIONALLY ENCLOSED BY '"'
+  TRAILING NULLCOLS
+  (  
+       customer_id,
+       monto,
+       tipo
+  )

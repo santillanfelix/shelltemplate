@@ -1,0 +1,30 @@
+OPTIONS (ERRORS = 1000000)
+LOAD DATA
+  INFILE 'migracionBscs_MovDiario.csv'
+  BADFILE 'migracionBscs_BAD_MovDiario.csv'
+  DISCARDFILE 'migracionBscs_DIS_MovDiario.csv'
+  TRUNCATE 
+  INTO TABLE COST_CLIENTE_TMP
+  FIELDS TERMINATED BY "|" OPTIONALLY ENCLOSED BY '"'
+  TRAILING NULLCOLS
+  (  
+       custcode,
+       Customer_id,
+       dia_corte,
+       limite_credito,
+       tipo_cliente,
+       antiguedad,
+       Numero_radios,
+       Tasa_iva,
+       id_calificacion,
+       collector,
+	   rees_ant,
+	   customer_reestructura,
+	   id_calificacion_reestructura,
+	   ANTIGUEDAD_REESTRUCTURA,
+       US_ALTA CONSTANT 'SYSTEM',
+       FECHA_SIGUIENTE_EJECUCION "GET_NEW_EXECUTION_DATE(:dia_corte)",
+       FE_ALTA "trunc(SYSDATE)",
+       ESTATUS CONSTANT '1',
+       RECALCULA CONSTANT '1'
+  )

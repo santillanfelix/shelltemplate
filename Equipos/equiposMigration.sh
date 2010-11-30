@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export RUTA='/opt/batch/credit'
+export RUTA='/opt/apps/batch/CostControl'
 sh_user(){
 archivoBscs=$RUTA/userBSCS.txt
 export passBscs=`cat $archivoBscs | awk '
@@ -166,9 +166,9 @@ fi
 return $codST
 }
 
-export ORACLE_HOME=/oracle/app/oracle/product/10.2.0.3
-export ORACLE_SID=BSCS_ONLINE
-export NLS_LANG=AMERICAN_AMERICA.WE8ISO8859P1
+#export ORACLE_HOME=/oracle/app/oracle/product/10.2.0.3
+#export ORACLE_SID=BSCS_ONLINE
+#export NLS_LANG=AMERICAN_AMERICA.WE8ISO8859P1
 export TS=`date +%s`
 sh_user
 echo $usCost

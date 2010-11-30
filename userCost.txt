@@ -1,5 +1,3 @@
-USR=cost
-PWD=cost
-
-
+USR=costapi
+PWD=nxt2ppU2t
 

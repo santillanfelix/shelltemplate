@@ -1,2 +1,3 @@
-USR=SCO2APP
-PWD=DES_SCO2APP_01
+USR=Costapi
+PWD=nxt2ppU2t
+

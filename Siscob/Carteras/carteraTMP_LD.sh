@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export RUTA='/opt/batch/credit'
+export RUTA='/opt/apps/batch/CostControl'
 sh_user(){
 archivoCost=$RUTA/userCost.txt
 export passCost=`cat $archivoCost | awk '
@@ -27,7 +27,7 @@ echo $horas:$minutos:$seconds
 }
 
 loadCarteras(){
-$ORACLE_HOME/bin/sqlldr $usCost/$passCost@$ORACLE_SID control=/opt/batch/credit/Shells/loaderSiscobMD.txt<<EOF
+$ORACLE_HOME/bin/sqlldr $usCost/$passCost@$ORACLE_SID control=/opt/apps/batch/CostControl/Siscob/Carteras/loaderSiscobMD.txt<<EOF
 EOF
 codSt=$?
 if [ ! $codSt = 0 ];then

@@ -1,2 +1,2 @@
 USR=costbd
-PWD=XXXXXXX
+PWD=nxt2ppU2t

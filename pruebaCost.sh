@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export RUTA='/opt/batch/credit'
+export RUTA='/opt/apps/batch/CostControl'
 sh_user(){
 archivoCost=$RUTA/userCost.txt
 export passCost=`cat $archivoCost | awk '

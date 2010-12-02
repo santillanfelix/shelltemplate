@@ -1,16 +1,22 @@
-#!/bin/sh
+#!/bin/sh 
+# vim: set ts=2 sw=2 sts=2 et si ai: 
 
-export RUTA='/opt/apps/batch/CostControl'
-sh_user(){
-archivoBscs=$RUTA/userBSCS.txt
-export passBscs=`cat $archivoBscs | awk '
-{ if(substr($0,1,4)=="PWD=")
-      print substr($0,5,20);
-   }'`
-export userBscs=`cat $archivoBscs | awk '
-{ if ( substr($0,1,4) == "USR=")
-      print substr($0,5,20);
-   }'`
+# costControlMigration.sh
+# =
+#
+
+. ${HOME}/.costcontrolrc
+
+RUTA=${APP_HOME}
+
+# use openssl for encrypt/decrypt information
+getUserInformation () {
+  fkey=${APP_HOME}/applications.key
+  fcyp=${APP_HOME}/user-bscs.pswd
+  info=`openssl enc -d -aes256 -salt -pass file:${fkey} -in ${fcyp}`
+  user=${info%@*}
+  pasw=${info#*@}
+
 }
 
 calcula_dia() {

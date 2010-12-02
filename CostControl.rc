@@ -1,0 +1,32 @@
+#!/bin/sh 
+# vim: set ts=2 sw=2 sts=2 et si ai syntax=sh: 
+
+# CostControl.rc
+# =
+# 2010, Hewlett-Packard Company
+# Andres Aquino <aquino@hp.com>
+# All rights reserved.
+# 
+
+# set environment
+APP_HOME="${HOME}/Dropbox/nextel.com.mx/CostControl.git"
+APP_NAME="CostControl"
+APP_KEYF="${APP_HOME}/${APP_NAME}.key"
+APP_DATE=`date "+%Y%m%d"`
+
+export ORACLE_HOME=/oracle/app/oracle/product/10.2.0.3
+export NLS_LANG=AMERICAN_AMERICA.WE8ISO8859P1
+
+# functions
+
+# use openssl for encrypt/decrypt information
+getUserInformation () {
+  info=`openssl enc -d -aes256 -salt -pass file:${APP_KEYF} -in ${APP_HOME}/${1}`
+  user=${info%@*}
+  pasw=${info#*@}
+
+}
+
+
+
+#

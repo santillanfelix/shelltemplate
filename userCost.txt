@@ -1,3 +1,0 @@
-USR=costapi
-PWD=nxt2ppU2t
-

@@ -1,2 +1,0 @@
-USR=costbd
-PWD=nxt2ppU2t

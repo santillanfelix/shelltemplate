@@ -1,7 +1,7 @@
 #!/bin/sh 
 # vim: set ts=2 sw=2 sts=2 et si ai syntax=sh: 
 
-# CostControl.rc
+# setEnviroment.rc
 # =
 # 2010, Hewlett-Packard Company
 # Andres Aquino <aquino@hp.com>
@@ -9,9 +9,9 @@
 # 
 
 # set environment
-APP_HOME="${HOME}/Dropbox/nextel.com.mx/CostControl.git"
-APP_NAME="CostControl"
-APP_KEYF="${APP_HOME}/${APP_NAME}.key"
+APP_HOME="${HOME}/Dropbox/nextel.com.mx/ShellTemplate.git"
+APP_NAME="ShellTemplate"
+APP_KEYF="${APP_HOME}/ShellTemplate.key"
 APP_DATE=`date "+%Y%m%d"`
 
 export ORACLE_HOME=/oracle/app/oracle/product/10.2.0.3

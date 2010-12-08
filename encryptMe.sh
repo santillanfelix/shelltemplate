@@ -8,6 +8,8 @@
 # All rights reserved.
 # 
 
+. ${HOME}/.shelltemplaterc
+
 fpass="${1}"
 fcyphred="${1%.info}.pswd"
 

@@ -8,6 +8,8 @@
 # All rights reserved.
 # 
 
+. ${HOME}/.shelltemplaterc
+
 fcyphred="${1}"
 
 echo "Decrypting file..."

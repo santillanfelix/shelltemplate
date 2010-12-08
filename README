@@ -10,6 +10,22 @@ archivos necesarios y las puestas en produccion deberan de ser mucho mas sencill
 
 Esquema
 -
+   .
+   |-- README
+   |-- ShellTemplate.key
+   |-- ShellTemplate.start
+   |-- ShellTemplate.stop
+   |-- apps
+   |   |-- firstApplication.sh
+   |   `-- secondApplication.sh
+   |-- decryptMe.sh
+   |-- encryptMe.sh
+   |-- files
+   |-- install.sh
+   |-- libutils.sh
+   `-- setEnviroment.rc
+
+1 directory, 12 files
 
 
 

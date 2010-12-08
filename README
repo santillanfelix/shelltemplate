@@ -12,6 +12,10 @@ Esquema
 -
 
 
+
+
+
+Otros:
 De la configuracion
 Usar un archivo de configuracion general donde se coloquen los parametros requeridos por la
 aplicacion. Este archivo puede referenciarse por una liga desde el home del usuario para poder
@@ -19,24 +23,24 @@ ubicar los contextos de ejecucion.
 
 Ejemplo:
  - el directorio de ejecucion se encuentra en:
-      /opt/apps/batch/CompSvcBatchBC
+      /opt/apps/batch/ShellTemplate
 
  - en el directorio tenemos un archivo con los parametros de configuracion en:
       CompSvcBatchBC.rc
-      /opt/apps/batch/CompSvcBatchBC/CompSvcBatchBC.rc
+      /opt/apps/batch/ShellTemplate/setEnvironment.rc
 
  - el contenido del archivo, es el siguiente:
-      APP_PATH=/opt/apps/batch/CompSvcBatchBC
-      APP_FKEY=CompSvcBatchBC.key
+      APP_PATH=/opt/apps/batch/ShellTemplate
+      APP_FKEY=ShellTemplate.key
       etc..
 
  - y referenciarlo de la siguiente manera:
-      ln -sf /opt/apps/batch/CompSvcBatchBC/CompSvcBatchBC.rc $HOME/.compsvcbatchrc
+      ln -sf /opt/apps/batch/ShellTemplate/setEnvironment.rc $HOME/.shelltemplaterc
 
  - de tal manera que lo podriamos referenciar en algun otro shell de la sig manera:
       ...
       echo "Cargando configuracion"
-      . ${HOME}/.compsvcbatchrc
+      . ${HOME}/.shelltemplaterc
       ...
 
 La idea de hacer este tipo de configuracion, es usar las rutas por defecto del sistema operativo (en
@@ -44,9 +48,6 @@ este caso el $HOME del usuario) para poder cargar los parametros de las aplicaci
 conflictos por realizar la ejecucion de las mismas al no encontrarse dentro de los directorios de
 ejecucion. De esta manera se puede ejecutar el shell desde cualquier ubicacion y estaremos seguros
 de que este se ejecutara acorde a nuestros parametros.
-
-Los archivos son los siguientes:
-   
 
 
 

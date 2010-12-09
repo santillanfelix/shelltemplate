@@ -26,8 +26,7 @@ APFLTR=
 
 #
 # get the enviroment for the SO running
-set_environment () 
-{
+setEnvironment () {
   # terminal line settings
   stty 2> /dev/null > /dev/null 
 
@@ -83,7 +82,7 @@ set_environment ()
   if [ ${#APLOGD} -eq 0 ]
   then
     APLOGD=${APPATH}/logs
-    log_action "DEBUG" "APLOGD unset, using default values: ${APLOGD}"
+    logAction "DEBUG" "APLOGD unset, using default values: ${APLOGD}"
   fi
   APLOGS=${APLOGD}/${APNAME}
   APTEMP=${APLOGD}/temp
@@ -150,14 +149,13 @@ set_environment ()
       IPADDRESS="127.0.0.1"
     ;;
   esac
-  log_action "DEBUG" "starting ${APNAME}, using a ${APSYSO} Platform System"
+  logAction "DEBUG" "starting ${APNAME}, using a ${APSYSO} Platform System"
 }
 
 
 #
 # set Application's Name
-set_name () 
-{
+setName () {
   local AP_NAME=${1}
   local AP_PATH=${2}
 
@@ -179,8 +177,7 @@ set_name ()
 
 #
 # set log
-set_log () 
-{
+setLogger () {
   local AP_LOGD=${1}
 
   # log's path
@@ -198,8 +195,7 @@ set_log ()
 
 #
 # set processes
-set_proc () 
-{
+setProcesses () {
   local AP_PROC=${1}
 
   # process name
@@ -213,9 +209,7 @@ set_proc ()
 # get the process ID of an app
 #  FILTER = strings to look for in process list (ej. java | rmi;java | iplanet,cci)
 #  PROCID = IDname for process (ej. iplanets)
-get_process_id () 
-{
-  #
+getProcessID () {
   local FILTER="${1}"
   
   [ ${#FILTER} -ne 0 ] && APFLTR=${FILTER}
@@ -223,20 +217,20 @@ get_process_id ()
   WRDSLIST=`echo  "${APUSER},${APFLTR}" | sed -e "s/\///g;s/,/\/\&\&\//g;s/;/\/\|\|\//g"` 
   # extraer procesos existentes y filtrar las cadenas del archivo de configuracion
   ps ${PSOPTS} > ${PIDFILE}.allps
-  log_action "DEBUG" "filtering process list with [ps ${PSOPTS}]"
-  ${VIEWMLOG} && report_status "i" "Creating of ${PIDFILE}.allps"
+  logAction "DEBUG" "filtering process list with [ps ${PSOPTS}]"
+  ${VIEWMLOG} && showStatus "i" "Creating of ${PIDFILE}.allps"
   
   # extraer los procesos que nos interesan 
   awk "/${WRDSLIST}/{print}" ${PIDFILE}.allps > ${PIDFILE}.ps
-  log_action "DEBUG" "looking for /${WRDSLIST}/ in ${PIDFILE}.allps owned by ${APUSER}"
+  logAction "DEBUG" "looking for /${WRDSLIST}/ in ${PIDFILE}.allps owned by ${APUSER}"
   
   # el archivo existe y es mayor a 0 bytes 
   if [ -s ${PIDFILE}.ps ]
   then
-    ${VIEWMLOG} && report_status "i" "${PIDFILE}.allps < /${WRDSLIST}/ = uju!"
+    ${VIEWMLOG} && showStatus "i" "${PIDFILE}.allps < /${WRDSLIST}/ = uju!"
     # extraer los procesos y reordenarlos
     sort -n -k8 ${PIDFILE}.ps > ${PIDFILE}.pss
-    log_action "DEBUG" "hey, we have one ${APPRCS} process alive in ${PIDFILE}.ps "
+    logAction "DEBUG" "hey, we have one ${APPRCS} process alive in ${PIDFILE}.ps "
     
     # extraer los pid de los procesos implicados 
     awk -v P=${PSPOS} '{print $(3+P)}' ${PIDFILE}.pss > ${PIDFILE}.pid
@@ -245,9 +239,9 @@ get_process_id ()
     awk -v P=${PSPOS} '{print $(4+P)}' ${PIDFILE}.pss | sort -rn | uniq > ${PIDFILE}.ppid
 
   else
-    ${VIEWMLOG} && report_status "i" "${PIDFILE}.allps < /${WRDSLIST}/ = dawm!"
+    ${VIEWMLOG} && showStatus "i" "${PIDFILE}.allps < /${WRDSLIST}/ = dawm!"
     # eliminar archivos ppid, en caso de que el proceso ya no exista
-    log_action "DEBUG" "hey, ${APPRCS} is not running in ${PIDFILE}.ps "
+    logAction "DEBUG" "hey, ${APPRCS} is not running in ${PIDFILE}.ps "
     rm -f ${PIDFILE}.{pid,ppid}
   fi
   rm -f ${PIDFILE}.{pss}
@@ -255,29 +249,28 @@ get_process_id ()
 
 #
 # verify the PID's for a specific process
-process_running () 
-{
+getProcessInExecution () {
   local COUNT=0
   local EACH=""
 
   # toma de base el APPRCS que se encuentra instanciada 
   PIDFILE=${APLOGT}
-  log_action "DEBUG" "looking for ${PIDFILE}.pid"
+  logAction "DEBUG" "looking for ${PIDFILE}.pid"
 
   # si no existe el PID, forzar la busqueda 
-  [ ! -s ${PIDFILE}.pid ] && get_process_id
+  [ ! -s ${PIDFILE}.pid ] && getProcessID
 
   # caso contrario, verificar que sea correcto 
   if [ -s ${PIDFILE}.pid ]
   then
     PROCESS=`head -n1 ${PIDFILE}.pid`
-    ${VIEWMLOG} && report_status "i" "${PIDFILE}.pid > [ ${PROCESS} ]"
+    ${VIEWMLOG} && showStatus "i" "${PIDFILE}.pid > [ ${PROCESS} ]"
     kill -0 ${PROCESS} > /dev/null 2>&1
     RESULT=$?
     [ ${RESULT} -ne 0 ] && STATUS="process ${APPRCS} is not running"
     [ ${RESULT} -eq 0 ] && STATUS="process ${APPRCS} is running"
-    ${VIEWMLOG} && report_status "i" "Well, ${STATUS} (kill -0 PID)"
-    log_action "DEBUG" "${STATUS}"
+    ${VIEWMLOG} && showStatus "i" "Well, ${STATUS} (kill -0 PID)"
+    logAction "DEBUG" "${STATUS}"
     return ${RESULT}
   else
     rm -f ${PIDFILE}.*
@@ -289,8 +282,7 @@ process_running ()
 
 #
 # verify the PID's for a specific process
-processes_running () 
-{
+isProcessExecuting () {
   local COUNT=0
   local EACH=""
 
@@ -302,7 +294,7 @@ processes_running ()
       PROCESS=`head -n1 ${PIDFILE}`
       kill -0 ${PROCESS} > /dev/null 2>&1
       RESULT=$?
-      [ ${RESULT} -ne 0 ] && log_action "DEBUG" "${PIDFILE} is not a valid process"
+      [ ${RESULT} -ne 0 ] && logAction "DEBUG" "${PIDFILE} is not a valid process"
       [ ${RESULT} -ne 0 ] && rm -f ${PIDFILE}
       return ${RESULT}
     fi
@@ -312,8 +304,7 @@ processes_running ()
 
 #
 # event log
-log_action () 
-{
+logAction () {
   local LEVEL="${1}"
   local ACTION="${2}"
   
@@ -369,8 +360,7 @@ log_action ()
 
 #
 # show status of app execution
-report_status () 
-{
+showStatus () {
   local STATUS="${1}"
   local MESSAGE="${2}"
   
@@ -396,27 +386,26 @@ report_status ()
 
 
 #
-# filter_in_log
-filter_in_log () 
-{
+# searchInLog
+searchInLog () {
   local FILTER="${1}"
   local WRDSLIST=`echo "${FILTER}" | sed -e "s/\///g;s/,/\/\&\&\//g;s/;/\/\|\|\//g"` 
 
   # la long de la cad no esta vacia
-  [ ${#FILTER} -eq 0 ] && log_action "DEBUG" "Umh, please set the filter (UP or DOWN)String"
+  [ ${#FILTER} -eq 0 ] && logAction "DEBUG" "Umh, please set the filter (UP or DOWN)String"
   [ ${#FILTER} -eq 0 ] && return 1
 
   # extraer los procesos que nos interesan 
   [ ! -f ${APLOGP}.log ] && touch ${APLOGP}.log
   cut -c1-160 ${APLOGP}.log | awk "BEGIN{res=0}/${WRDSLIST}/{res=1}END{if(res==0){exit 1}}"
   LASTSTATUS=$?
-  log_action "DEBUG" "ok, searching /${WRDSLIST}/ in ${APLOGP}.log: ${LASTSTATUS}"
+  logAction "DEBUG" "ok, searching /${WRDSLIST}/ in ${APLOGP}.log: ${LASTSTATUS}"
   
   if [ ${LASTSTATUS} -eq 0 ]
   then
-    log_action "DEBUG" "search of /${FILTER}/ was succesfull"
+    logAction "DEBUG" "search of /${FILTER}/ was succesfull"
   else
-    log_action "DEBUG" "search of /${FILTER}/ was failed"
+    logAction "DEBUG" "search of /${FILTER}/ was failed"
   fi
 
   return ${LASTSTATUS}
@@ -449,8 +438,7 @@ printto()
 
 #
 # waiting process indicator
-wait_for () 
-{
+waiting () {
   local WAITSTR="- \ | / "
   local STATUS=${1}
   local TIMETO=${2}
@@ -505,9 +493,10 @@ wait_for ()
 
 #
 # 
-applications_tree () 
-{
-  process_running
+getParentsOf () {
+  local APID=
+  local APPID=
+  getProcessInExecution
 
   if [ -s ${APLOGT}.pid ]
   then
@@ -521,7 +510,7 @@ applications_tree ()
     done
     sort -n ${APLOGT}.proc > ${APLOGT}.list
   else
-    log_action "ERR" "${APLOG} process doesn't exist!"
+    logAction "ERR" "${APLOG} process doesn't exist!"
   fi  
 
 }
@@ -529,10 +518,9 @@ applications_tree ()
 
 #
 #
-execution_tree () 
-{
+treeOfApplications () {
   # determinar procesos a terminar
-  applications_tree
+  getParentsOf
 
   #
   if [ -f ${APLOGT}.list ]
@@ -556,33 +544,33 @@ execution_tree ()
 # [ok] test para verificar el log y la busqueda de cadenas
 #. test.mconf
 #get_enviroment
-#log_action "INFO" "Verificar el estado de los pid's"
+#logAction "INFO" "Verificar el estado de los pid's"
 
 # --
 # [ok] test para verificar procesos
 #get_enviroment
-#get_process_id "gvfs,spaw;gnome" 
+#getProcessID "gvfs,spaw;gnome" 
 
 #
 # [] test para verificar los procesos asociados a un .pid
-#set_environment
-#set_proc "gvfs"
-#get_process_id "gvfs"
-#wait_for "CLEAR"
+#setEnvironment
+#setProcesses "gvfs"
+#getProcessID "gvfs"
+#waiting "CLEAR"
 
 # [ok] test para mostrar procesos
-#set_environment
-#report_status "OK" "Reinicio WebLogic 9.2 "
-#report_status "ERR" "Reinicio WebLogic 9.2 "
+#setEnvironment
+#showStatus "OK" "Reinicio WebLogic 9.2 "
+#showStatus "ERR" "Reinicio WebLogic 9.2 "
 
 # [ok] test para mostrar indicador de espera
-#set_environment
-#wait_for "Revisando el log de servicios " 5
-#wait_for "CLEAR"
-#report_status "*" "Reinicio WebLogic 9.2 "
+#setEnvironment
+#waiting "Revisando el log de servicios " 5
+#waiting "CLEAR"
+#showStatus "*" "Reinicio WebLogic 9.2 "
 #while (true)
 #do
-# wait_for "STANDBY"
+# waiting "STANDBY"
 # # como el usleep no funciona con milliseconds, usamos un perlliner
 # perl -e 'select(undef,undef,undef,.3)'
 #done

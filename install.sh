@@ -17,7 +17,7 @@ then
 fi
 
 # create RC file
-[ -h ${HOME}/.costcontrolrc ] && rm -f ${HOME}/.costcontrolrc
-ln -sf ${CURRENT}/CostControl.rc ${HOME}/.costcontrolrc 
+[ -h ${HOME}/.shelltemplaterc ] && rm -f ${HOME}/.shelltemplaterc
+ln -sf ${CURRENT}/setEnvironment.rc ${HOME}/.shelltemplaterc 
 
 #

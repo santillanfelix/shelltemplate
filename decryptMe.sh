@@ -10,12 +10,15 @@
 
 . ${HOME}/.shelltemplaterc
 
-fcyphred="${1}"
+# encrypted file
+encryptedFile="${1}"
 
 echo "Decrypting file..."
-info=`openssl enc -d -aes256 -salt -pass file:CostControl.key -in ${fcyphred}`
-echo " > parameter[1]: ${info%@*}"
-echo " > parameter[2]: ${info#*@}"
+info=`openssl enc -d -aes256 -salt -pass file:${AP_KEYF} -in ${encryptedFile}`
+
+# show information
+echo " param[user]: ${info%@*}"
+echo " param[pswd]: ${info#*@}"
 
 
 # 

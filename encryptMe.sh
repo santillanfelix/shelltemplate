@@ -10,12 +10,15 @@
 
 . ${HOME}/.shelltemplaterc
 
-fpass="${1}"
-fcyphred="${1%.info}.pswd"
+# unencrypted file & encrypted file
+uncryptedFile="${1}"
+encryptedFile="${1%.info}.pswd"
 
 echo "Encrypting file..."
-openssl enc -aes256 -salt -pass file:CostControl.key -in ${fpass} -out ${fcyphred}
-mv ${fpass} .${fpass}
+openssl enc -aes256 -salt -pass file:${APP_KEYF} -in ${uncryptedFile} -out ${encryptedFile}
+
+# save (temporaly)
+mv ${uncryptedFile} .${uncryptedFile}
 
 
 # 

@@ -9,26 +9,23 @@
 # 
 
 # set environment
-APP_HOME="${HOME}/Dropbox/hp.com/ShellTemplate.git"
-APP_NAME="ShellTemplate"
-APP_KEYF="${APP_HOME}/ShellTemplate.key"
+AP_HOME="${HOME}/ShellTemplate"
+AP_NAME="ShellTemplate"
+AP_KEYF="${AP_HOME}/ShellTemplate.key"
 
-JAVA_HOME="/opt/java6"
 JAVA_VM="-server"
-VM_MEMARGS="-Xms512m -Xmx512m -XX:PermSize=64m -XX:+DisableExplicitGC -Xverbosegc:file=${APP_HOME}/logs/${APP_NAME}.log"
-CLASSPATH=$APP_HOME/lib/log4j-1.2.8.jar:.
+VM_MEMARGS="-Xms512m -Xmx512m -XX:PermSize=64m -XX:+DisableExplicitGC -Xverbosegc:file=${AP_HOME}/logs/${AP_NAME}.log"
+CLASSPATH=$AP_HOME/lib/log4j-1.2.8.jar:.
 
-ORACLE_HOME="/oracle/app/oracle/product/10.2.0.3"
-NLS_LANG="AMERICAN_AMERICA.WE8ISO8859P1"
-
-export ${ORACLE_HOME} ${NLS_LANG} ${JAVA_HOME} ${JAVA_VM} ${CLASSPATH}
-
+export JAVA_HOME="/opt/java6"
+export ORACLE_HOME="/oracle/app/oracle/product/10.2.0.3"
+export NLS_LANG="AMERICAN_AMERICA.WE8ISO8859P1"
 
 
 # functions
 # use openssl for encrypt/decrypt information
 getUserInformation () {
-  info=`openssl enc -d -aes256 -salt -pass file:${APP_KEYF} -in ${APP_HOME}/${1}`
+  info=`openssl enc -d -aes256 -salt -pass file:${AP_KEYF} -in ${AP_HOME}/${1}`
   user=${info%@*}
   pasw=${info#*@}
 

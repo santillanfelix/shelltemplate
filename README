@@ -46,8 +46,8 @@ Ejemplo:
       /opt/apps/batch/ShellTemplate/setEnvironment.rc
 
  - el contenido del archivo, es el siguiente:
-      APP_PATH=/opt/apps/batch/ShellTemplate
-      APP_FKEY=ShellTemplate.key
+      AP_PATH=/opt/apps/batch/ShellTemplate
+      AP_FKEY=ShellTemplate.key
       etc..
 
  - y referenciarlo de la siguiente manera:

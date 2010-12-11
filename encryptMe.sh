@@ -11,14 +11,14 @@
 . ${HOME}/.shelltemplaterc
 
 # unencrypted file & encrypted file
-uncryptedFile="${1}"
+unencryptedFile="${1}"
 encryptedFile="${1%.info}.pswd"
 
 echo "Encrypting file..."
-openssl enc -aes256 -salt -pass file:${APP_KEYF} -in ${uncryptedFile} -out ${encryptedFile}
+openssl enc -aes256 -salt -pass file:${AP_KEYF} -in ${unencryptedFile} -out ${encryptedFile}
 
 # save (temporaly)
-mv ${uncryptedFile} .${uncryptedFile}
+mv ${unencryptedFile} .${unencryptedFile}
 
 
 # 

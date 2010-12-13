@@ -2,15 +2,17 @@
 # vim: set ts=2 sw=2 sts=2 si ai et: 
 
 # libutils.sh -- library with some util functions
-# =-=
-# Developer
-# Andres Aquino Morales <andres.aquino@gmail.com>
+# =
+# 2010, Hewlett-Packard Company
+# Andres Aquino <aquino@hp.com>
+# All rights reserved.
 # 
+
 
 #
 # constants
 # initialize app enviroment
-APSYSO="`uname -s`"
+APSYSO=`uname -s`
 APHOST=`hostname | sed -e "s/\..*//g"`
 APUSER=`id -u -n`
 APDATE=`date "+%Y%m%d"`
@@ -59,10 +61,6 @@ setEnvironment () {
     CGRAY=
   fi
   
-  # application's structure
-  # [monopse]
-  # /opt/usrapp/monopse
-
   # applications's name
   if [ ${#APNAME} -eq 0 ]
   then

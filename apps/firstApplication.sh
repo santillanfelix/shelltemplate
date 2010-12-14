@@ -5,10 +5,10 @@
 # =
 #
 
-. ${HOME}/.costcontrolrc
+. ${HOME}/.shelltemplaterc
 
 TS=`date +%s`
-getUserInformation "user-bscs.pswd"
+getUserInformation "infoApp.pswd"
 echo "User: ${user}"
 echo "Pasw: ${pasw}"
 

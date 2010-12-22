@@ -8,20 +8,41 @@
 # All rights reserved.
 # 
 
-# set environment
+# application's environment
 AP_HOME="${HOME}/ShellTemplate"
 AP_NAME="ShellTemplate"
 AP_KEYF="${AP_HOME}/ShellTemplate.key"
 
-JAVA_VM="-server"
-VM_MEMARGS="-Xms512m -Xmx512m -XX:PermSize=64m -XX:+DisableExplicitGC -Xverbosegc:file=${AP_HOME}/logs/${AP_NAME}.log"
-CLASSPATH=$AP_HOME/lib/log4j-1.2.8.jar:.
+# java's environment
+JAVA_HOTSPOT="-server"
+JAVA_INITSIZE="512m"
+JAVA_MAXMSIZE="512m"
+JAVA_EXTFLAGS="-XX:PermSize=64m"
+JAVA_EXTFLAGS="${JAVA_EXTFLAGS} -XX:+DisableExplicitGC"
+JAVA_EXTFLAGS="${JAVA_EXTFLAGS} -Xverbosegc:file=${AP_HOME}/logs/${AP_NAME}.log"
+JAVA_HOME="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk"
+JAVA_ARGS="-Xms${JAVA_INITSIZE} -Xmx${JAVA_MAXMSIZE} ${JAVA_EXTFLAGS}"
+CLASSPATH="."
+for clsfile in ${AP_HOME}/libs/*.jar
+do
+  CLASSPATH="${clsfile}:${CLASSPATH}"
+done
 
-export JAVA_HOME="/opt/java6"
+declare -x JAVA_HOME
+
+#
+# oracle's variables
 export ORACLE_HOME="/oracle/app/oracle/product/10.2.0.3"
 export NLS_LANG="AMERICAN_AMERICA.WE8ISO8859P1"
 
+#
+# load all libraries
+for lib in ${AP_HOME}/*.lib.sh
+do
+  . ${lib}
+done
 
+#
 # functions
 # use openssl for encrypt/decrypt information
 getUserInformation () {

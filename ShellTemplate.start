@@ -9,7 +9,6 @@
 # 
 
 . ${HOME}/.shelltemplaterc
-. ${AP_HOME}/libutils.sh
 
 printto "Starting... "
 

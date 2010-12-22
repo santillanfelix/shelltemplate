@@ -1,7 +1,7 @@
 #!/bin/sh 
 # vim: set ts=2 sw=2 sts=2 si ai et: 
 
-# libutils.sh -- library with some util functions
+# commonUtils.lib.sh -- library with some util functions
 # =
 # 2010, Hewlett-Packard Company
 # Andres Aquino <aquino@hp.com>

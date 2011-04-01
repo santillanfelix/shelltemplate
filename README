@@ -1,15 +1,22 @@
 ShellTemplate
 =
 
+Developed by
+   Andres Aquino <aquino(at)hp.com>
+
+Source Code
+   [GitHub]       http://andresaquino.github.com/ShellTemplate
+   [GoggleCode]   http://shelltemplate.googlecode.com/svn/trunk/
+   [Bugtracker]   http://github.com/andresaquino/shelltemplate/issues
+
 Proposito
--
-Crear una plantilla para desarrollar aplicaciones que se ejecutaran en shell, la necesidad viene de
-homologar la manera en como se desarrollan este tipo de aplicaciones al tener diferentes grupos de
-trabajo; de esta manera, el implementar una plantilla nos permite contextualizar los diferentes
-archivos necesarios y las puestas en produccion deberan de ser mucho mas sencillas.
+   Crear una plantilla para desarrollar aplicaciones que se ejecutan en shell, la necesidad viene
+   de homologar la manera en como se desarrollan este tipo de aplicaciones al tener diferentes
+   grupos de trabajo; de esta manera, el implementar una plantilla nos permite contextualizar los
+   diferentes archivos necesarios y las puestas en produccion deberan de ser (en teoria) mucho mas
+   sencillas.
 
 Esquema
--
    .
    |-- README
    |-- ShellTemplate.key
@@ -27,11 +34,7 @@ Esquema
 
 1 directory, 12 files
 
-
-
-
-
-Otros:
+Otros
 De la configuracion
 Usar un archivo de configuracion general donde se coloquen los parametros requeridos por la
 aplicacion. Este archivo puede referenciarse por una liga desde el home del usuario para poder

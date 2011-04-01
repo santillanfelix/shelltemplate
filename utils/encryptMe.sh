@@ -3,9 +3,9 @@
 
 # encryptMe.sh
 # =
-# 2010, Hewlett-Packard Company
+#
 # Andres Aquino <aquino@hp.com>
-# All rights reserved.
+# Hewlett-Packard Company
 # 
 
 . ${HOME}/.shelltemplaterc

@@ -16,6 +16,7 @@ APHOST=`hostname | sed -e "s/\..*//g"`
 APUSER=`id -u -n`
 APDATE=`date "+%Y%m%d"`
 APHOUR=`date "+%H%M"`
+APTIME="${APDATE}${APHOUR}"
 APLEVL="DEBUG"
 
 # globals

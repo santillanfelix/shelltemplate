@@ -11,47 +11,64 @@
 # application's environment
 AP_HOME="${HOME}/ShellTemplate"
 AP_NAME="ShellTemplate"
-AP_KEYF="${AP_HOME}/ShellTemplate.key"
+AP_KEYF="${AP_HOME}/private.key"
 
-# java's environment
-JAVA_HOTSPOT="-server"
-JAVA_INITSIZE="512m"
-JAVA_MAXMSIZE="512m"
-JAVA_EXTFLAGS="-XX:PermSize=64m"
-JAVA_EXTFLAGS="${JAVA_EXTFLAGS} -XX:+DisableExplicitGC"
-JAVA_EXTFLAGS="${JAVA_EXTFLAGS} -Xverbosegc:file=${AP_HOME}/logs/${AP_NAME}.log"
-JAVA_HOME="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk"
-JAVA_ARGS="-Xms${JAVA_INITSIZE} -Xmx${JAVA_MAXMSIZE} ${JAVA_EXTFLAGS}"
-CLASSPATH="."
-for clsfile in ${AP_HOME}/libs/*.jar
-do
-  CLASSPATH="${clsfile}:${CLASSPATH}"
-done
+set_java_environment ()
+{
+  # Language
+  LANG=es_MX.iso88591
 
-declare -x JAVA_HOME
+  # java's environment
+  JAVA_FLAGS=
 
-#
-# oracle's variables
-export ORACLE_HOME="/oracle/app/oracle/product/10.2.0.3"
-export NLS_LANG="AMERICAN_AMERICA.WE8ISO8859P1"
+  # Initial and Maximum size of the Java Heap
+  JAVA_FLAGS="${JAVA_FLAGS} -Xms512m"
+  JAVA_FLAGS="${JAVA_FLAGS} -Xmx512m"
 
-#
-# load all libraries
-for lib in ${AP_HOME}/*.lib.sh
-do
-  . ${lib}
-done
+  # Size of the heap reserved for the permanent generation hold
+  JAVA_FLAGS="${JAVA_FLAGS} -XX:PermSize=64m"
+  JAVA_FLAGS="${JAVA_FLAGS} -XX:MaxPermSize=128m"
+
+  # HeapDump
+  JAVA_FLAGS="${JAVA_FLAGS} -XX:+HeapDumpOnCtrlBreak"
+  JAVA_FLAGS="${JAVA_FLAGS} -XX:HeapDumpPath=${AP_PATH}/logs/${AP_NAME}-${AP_TIME}.hprof"
+
+  # Garbage Collector
+  JAVA_FLAGS="${JAVA_FLAGS} -XX:+DisableExplicitGC"
+  JAVA_FLAGS="${JAVA_FLAGS} -XX:file=${AP_HOME}/logs/${AP_NAME}-${AP_TIME}.gc"
+
+  # Java Security Policy
+  JAVA_FLAGS="${JAVA_FLAGS} -Djava.security.policy=${AP_HOME}/java.policy"
+
+}
+
+set_java_classpath ()
+{
+  # Java Classes
+  JAVA_CLASS="."
+  for classfile in ${AP_HOME}/libs/*.jar
+  do
+    JAVA_CLASS="${classfile}:${JAVA_CLASS}"
+  done
+
+  export CLASSPATH="${JAVA_CLASS}:."
+
+}
 
 #
 # functions
 # use openssl for encrypt/decrypt information
-getUserInformation () {
+get_user () {
   info=`openssl enc -d -aes256 -salt -pass file:${AP_KEYF} -in ${AP_HOME}/${1}`
-  user=${info%@*}
-  pasw=${info#*@}
+  echo ${info%@*}
 
 }
 
+get_password () {
+  info=`openssl enc -d -aes256 -salt -pass file:${AP_KEYF} -in ${AP_HOME}/${1}`
+  echo ${info#*@}
+
+}
 
 
 #

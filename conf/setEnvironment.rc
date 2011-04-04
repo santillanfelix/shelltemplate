@@ -45,13 +45,13 @@ set_java_environment ()
 set_java_classpath ()
 {
   # Java Classes
-  JAVA_CLASS="."
+  JAVA_CLASSPATH="."
   for classfile in ${AP_HOME}/libs/*.jar
   do
-    JAVA_CLASS="${classfile}:${JAVA_CLASS}"
+    JAVA_CLASSPATH="${classfile}:${JAVA_CLASSPATH}"
   done
 
-  export CLASSPATH="${JAVA_CLASS}:."
+  export CLASSPATH="${JAVA_CLASSPATH}:."
 
 }
 

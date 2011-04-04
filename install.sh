@@ -13,8 +13,8 @@ mkdir -p ~/bin
 mkdir -p ~/manuals/man1
 
 echo "[2] - Migrating all config files to new version..."
-cd ~/soya.git/setup/
-[ -d ~/soya ] && cp -rp ~/soya/setup/*.conf .
+cd ~/ShellTemplate.git/conf/
+[ -d ~/ShellT ] && cp -rp ~/ShellTemplate/conf/*.conf .
 for ap in *.conf
 do
   ln -sf ../soya.sh ${ap%.conf}.start

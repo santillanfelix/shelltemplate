@@ -1,0 +1,16 @@
+ShellTemplate
+=
+
+Roadmap
+   > Integrar en el setEnvironment la carga de las bibliotecas y setup del medio
+      Seria deseable que se pudiera cargar todo el environment en el shell con
+      solo una llamada al sistema.
+      Ej.
+         #!/bin/sh
+         . ${HOME}/.setenvironmentrc
+         ...
+
+   >  
+
+
+# vim: set ts=3 et sw=3 sts=3 si ai tw=80 lbr:

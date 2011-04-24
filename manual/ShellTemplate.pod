@@ -1,0 +1,88 @@
+=head1 NAME
+
+ShellTemplate - A shell template for standardize the work of every day
+
+=head1 SYNOPSIS
+
+A simple template for build shell applications, the purpose is standardize development, stablishing
+model of convention over configuration (like rails) meanwhile help transitions of development to
+production environments.
+
+Do you want help us, send us your commits <aquino@hp.com>
+
+=head1 DESCRIPTION 
+
+Proposito
+-
+Crear una plantilla para desarrollar aplicaciones que se ejecutaran en shell, la necesidad viene de
+homologar la manera en como se desarrollan este tipo de aplicaciones al tener diferentes grupos de
+trabajo; de esta manera, el implementar una plantilla nos permite contextualizar los diferentes
+archivos necesarios y las puestas en produccion deberan de ser mucho mas sencillas.
+
+Esquema
+-
+   .
+   |-- README
+   |-- ShellTemplate.key
+   |-- ShellTemplate.start
+   |-- ShellTemplate.stop
+   |-- apps
+   |   |-- firstApplication.sh
+   |   `-- secondApplication.sh
+   |-- decryptMe.sh
+   |-- encryptMe.sh
+   |-- files
+   |-- install.sh
+   |-- libutils.sh
+   `-- setEnviroment.rc
+
+1 directory, 12 files
+
+Otros:
+De la configuracion
+Usar un archivo de configuracion general donde se coloquen los parametros requeridos por la
+aplicacion. Este archivo puede referenciarse por una liga desde el home del usuario para poder
+ubicar los contextos de ejecucion.
+
+Ejemplo:
+ - el directorio de ejecucion se encuentra en:
+      /opt/apps/batch/ShellTemplate
+
+ - en el directorio tenemos un archivo con los parametros de configuracion en:
+      CompSvcBatchBC.rc
+      /opt/apps/batch/ShellTemplate/setEnvironment.rc
+
+ - el contenido del archivo, es el siguiente:
+      AP_PATH=/opt/apps/batch/ShellTemplate
+      AP_FKEY=ShellTemplate.key
+      etc..
+
+ - y referenciarlo de la siguiente manera:
+      ln -sf /opt/apps/batch/ShellTemplate/setEnvironment.rc $HOME/.shelltemplaterc
+
+ - de tal manera que lo podriamos referenciar en algun otro shell de la sig manera:
+      ...
+      echo "Cargando configuracion"
+      . ${HOME}/.shelltemplaterc
+      ...
+
+La idea de hacer este tipo de configuracion, es usar las rutas por defecto del sistema operativo (en
+este caso el $HOME del usuario) para poder cargar los parametros de las aplicaciones y evitar
+conflictos por realizar la ejecucion de las mismas al no encontrarse dentro de los directorios de
+ejecucion. De esta manera se puede ejecutar el shell desde cualquier ubicacion y estaremos seguros
+de que este se ejecutara acorde a nuestros parametros.
+
+=head1 AUTHOR
+
+ ShellTemplate v1.0
+ 2010, Hewlett-Packard Company
+
+ Andres Aquino <aquino@hp.com>
+ 
+=head1 BUGS
+
+ Always!
+ We need translators, developers, debbuggers and of course, beers!
+
+=cut
+# vim: set ts=3 et sw=3 sts=3 si ai tw=100 lbr:

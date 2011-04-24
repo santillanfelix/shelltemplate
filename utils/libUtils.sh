@@ -106,13 +106,15 @@ set_environment () {
   if [ ${#APLOGD} -eq 0 ]
   then
     APLOGD=${APPATH}/logs
-    log_action "DEBUG" "APLOGD unset, using default values: ${APLOGD}"
   fi
   APLOGS=${APLOGD}/${APNAME}
   APTEMP=${APLOGD}/temp
   APLOGP=${APTEMP}/${APNAME}
   [ ! -d ${APLOGD} ] && mkdir -p ${APLOGD}
   [ ! -d ${APTEMP} ] && mkdir -p ${APTEMP}
+
+  # key file to cipher/decipher information
+  APKEYF="${APHOME}/${APNAME}.key"
   
   HOSTNAME=`hostname`
   case "${APSYSO}" in
@@ -176,7 +178,18 @@ set_environment () {
       IPADDRESS="127.0.0.1"
     ;;
   esac
-  log_action "DEBUG" "starting ${APNAME}, using a ${APSYSO} Platform System"
+
+  # print a report
+  log_action "INFO" "${APNAME} starting, you're using ${APSYSO} Operating System"
+  log_action "DEBUG" ""
+  log_action "DEBUG" ""
+  log_action "DEBUG" ""
+  log_action "DEBUG" ""
+  log_action "DEBUG" ""
+  log_action "DEBUG" ""
+  log_action "DEBUG" ""
+  log_action "DEBUG" ""
+  log_action "DEBUG" ""
 }
 
 
@@ -518,42 +531,19 @@ wait_for () {
   fi
 }
 
-
-# TEST
-
-# --
-# [ok] test para verificar el log y la busqueda de cadenas
-#. test.mconf
-#get_enviroment
-#log_action "INFO" "Verificar el estado de los pid's"
-
-# --
-# [ok] test para verificar procesos
-#get_enviroment
-#get_process_id "gvfs,spaw;gnome" 
-
 #
-# [] test para verificar los procesos asociados a un .pid
-#set_environment
-#set_proc "gvfs"
-#get_process_id "gvfs"
-#wait_for "CLEAR"
+# functions
+# use openssl for encrypt/decrypt information
+get_user () {
+  info=`openssl enc -d -aes256 -salt -pass file:${APKEYF} -in ${APHOME}/${1}`
+  echo ${info%@*}
 
-# [ok] test para mostrar procesos
-#set_environment
-#report_status "OK" "Reinicio WebLogic 9.2 "
-#report_status "ERR" "Reinicio WebLogic 9.2 "
+}
 
-# [ok] test para mostrar indicador de espera
-#set_environment
-#wait_for "Revisando el log de servicios " 5
-#wait_for "CLEAR"
-#report_status "*" "Reinicio WebLogic 9.2 "
-#while (true)
-#do
-# wait_for "STANDBY"
-# # como el usleep no funciona con milliseconds, usamos un perlliner
-# perl -e 'select(undef,undef,undef,.3)'
-#done
+get_password () {
+  info=`openssl enc -d -aes256 -salt -pass file:${APKEYF} -in ${APHOME}/${1}`
+  echo ${info#*@}
+
+}
 
 #

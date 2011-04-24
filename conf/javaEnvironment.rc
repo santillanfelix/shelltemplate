@@ -1,7 +1,7 @@
 #!/bin/sh 
 # vim: set ts=2 sw=2 sts=2 et si ai syntax=sh: 
 
-# setEnvironment.rc
+# javaEnvironment.rc
 # =
 #
 # Andres Aquino <aquino(at)hp.com>
@@ -9,11 +9,10 @@
 # 
 
 # application's environment
-AP_HOME="${HOME}/ShellTemplate"
-AP_NAME="ShellTemplate"
-AP_KEYF="${AP_HOME}/private.key"
+APHOME="${HOME}/ShellTemplate"
+APNAME="ShellTemplate"
 
-set_java_environment ()
+java_environment ()
 {
   # Language
   LANG=es_MX.iso88591
@@ -31,42 +30,27 @@ set_java_environment ()
 
   # HeapDump
   JAVA_FLAGS="${JAVA_FLAGS} -XX:+HeapDumpOnCtrlBreak"
-  JAVA_FLAGS="${JAVA_FLAGS} -XX:HeapDumpPath=${AP_PATH}/logs/${AP_NAME}-${AP_TIME}.hprof"
+  JAVA_FLAGS="${JAVA_FLAGS} -XX:HeapDumpPath=${APPATH}/logs/${APNAME}-${APTIME}.hprof"
 
   # Garbage Collector
   JAVA_FLAGS="${JAVA_FLAGS} -XX:+DisableExplicitGC"
-  JAVA_FLAGS="${JAVA_FLAGS} -XX:file=${AP_HOME}/logs/${AP_NAME}-${AP_TIME}.gc"
+  JAVA_FLAGS="${JAVA_FLAGS} -XX:file=${APHOME}/logs/${APNAME}-${APTIME}.gc"
 
   # Java Security Policy
-  JAVA_FLAGS="${JAVA_FLAGS} -Djava.security.policy=${AP_HOME}/java.policy"
+  JAVA_FLAGS="${JAVA_FLAGS} -Djava.security.policy=${APHOME}/java.policy"
 
 }
 
-set_java_classpath ()
+java_classpath ()
 {
   # Java Classes
   JAVA_CLASSPATH="."
-  for classfile in ${AP_HOME}/libs/*.jar
+  for classfile in ${APHOME}/libs/*.jar
   do
     JAVA_CLASSPATH="${classfile}:${JAVA_CLASSPATH}"
   done
 
   export CLASSPATH="${JAVA_CLASSPATH}:."
-
-}
-
-#
-# functions
-# use openssl for encrypt/decrypt information
-get_user () {
-  info=`openssl enc -d -aes256 -salt -pass file:${AP_KEYF} -in ${AP_HOME}/${1}`
-  echo ${info%@*}
-
-}
-
-get_password () {
-  info=`openssl enc -d -aes256 -salt -pass file:${AP_KEYF} -in ${AP_HOME}/${1}`
-  echo ${info#*@}
 
 }
 

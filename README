@@ -1,4 +1,5 @@
 ShellTemplate
+An Small Shell Template for start/stop simple projects
 =
 
 Developed by
@@ -14,27 +15,38 @@ Proposito
    de homologar la manera en como se desarrollan este tipo de aplicaciones al tener diferentes
    grupos de trabajo; de esta manera, el implementar una plantilla nos permite contextualizar los
    diferentes archivos necesarios y las puestas en produccion deberan de ser (en teoria) mucho mas
-   sencillas.
+   sencillas y ordenadas.
 
 Esquema
    .
-   |-- README
-   |-- ShellTemplate.key
-   |-- ShellTemplate.start
-   |-- ShellTemplate.stop
-   |-- apps
-   |   |-- firstApplication.sh
-   |   `-- secondApplication.sh
-   |-- decryptMe.sh
-   |-- encryptMe.sh
-   |-- files
-   |-- install.sh
-   |-- libutils.sh
-   `-- setEnviroment.rc
+   ├── install.sh                      # Instalacion
+   ├── backups                         # Directorio de Backups
+   │   └── *.bkp
+   ├── bin                             # shells de aplicacion
+   │   └── myApplication.sh
+   ├── conf                            # configuracion (log4j,rc)
+   │   ├── log4j.properties
+   │   ├── private.key
+   │   └── setEnvironment.rc
+   ├── libs                            # donde ubicar los jars
+   │   └── *.jar
+   ├── logs                            # por si no usan soya o monopse
+   │   └── *.log
+   ├── manual                          # si acaso llegan a ensamblar un man
+   │   ├── myApplication.1
+   │   └── myApplication.pod
+   ├── utils                           # utilerias
+   │   ├── decryptMe.sh
+   │   ├── encryptMe.sh
+   │   ├── libutils.sh
+   │   ├── myApplication.check
+   │   ├── myApplication.start
+   │   └── myApplication.stop
+   ├── LICENSE
+   ├── README
+   └── ROADMAP
 
-1 directory, 12 files
 
-Otros
 De la configuracion
 Usar un archivo de configuracion general donde se coloquen los parametros requeridos por la
 aplicacion. Este archivo puede referenciarse por una liga desde el home del usuario para poder

@@ -18,14 +18,6 @@ cd ~/ShellTemplate.git/conf/
 for ap in *.conf
 do
   ln -sf ../soya.sh ${ap%.conf}.start
-  ln -sf ../soya.sh ${ap%.conf}.stop
-  ln -sf ../soya.sh ${ap%.conf}.check
-  ln -sf ../soya.sh ${ap%.conf}.logson
-  ln -sf ../soya.sh ${ap%.conf}.logsoff
-  ln -sf ../soya.sh ${ap%.conf}.syslogson
-  ln -sf ../soya.sh ${ap%.conf}.syslogsoff
-  ln -sf ../soya.sh ${ap%.conf}.dblogson
-  ln -sf ../soya.sh ${ap%.conf}.dblogsoff
 done
 
 echo "[3] - Switching to new version..."

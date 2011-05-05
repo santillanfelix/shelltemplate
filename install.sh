@@ -17,24 +17,24 @@ cd ~/ShellTemplate.git/conf/
 [ -d ~/ShellT ] && cp -rp ~/ShellTemplate/conf/*.conf .
 for ap in *.conf
 do
-  ln -sf ../soya.sh ${ap%.conf}.start
+  ln -sf ../shelltemplate.sh ${ap%.conf}.start
 done
 
 echo "[3] - Switching to new version..."
 cd ~
-[ -d ~/soya.old ] && rm -fr ~/soya.old
-[ -d ~/soya ] && mv ~/soya ~/soya.old
-[ -d ~/soya.git ] && mv ~/soya.git ~/soya
+[ -d ~/shelltemplate.old ] && rm -fr ~/shelltemplate.old
+[ -d ~/shelltemplate ] && mv ~/shelltemplate ~/shelltemplate.old
+[ -d ~/shelltemplate.git ] && mv ~/shelltemplate.git ~/shelltemplate
 
 echo "[4] - Installing unix documentation..."
-cp ~/soya/man1/soya.1 ~/manuals/man1/
-ln -sf ~/soya/soya.sh ~/soya/soya.version
-ln -sf ~/soya/soyarc ~/.soyarc
-ln -sf ~/soya/screenrc ~/.screenrc
+cp ~/shelltemplate/man1/shelltemplate.1 ~/manuals/man1/
+ln -sf ~/shelltemplate/shelltemplate.sh ~/shelltemplate/shelltemplate.version
+ln -sf ~/shelltemplate/shelltemplaterc ~/.shelltemplaterc
+ln -sf ~/shelltemplate/screenrc ~/.screenrc
 
 echo "[5] - Fixing permissiont..."
-chmod 0640 ~/soya/install.sh 
-chmod 0550 ~/soya/soya.sh
+chmod 0640 ~/shelltemplate/install.sh 
+chmod 0550 ~/shelltemplate/shelltemplate.sh
 
 echo "[*] - That's all..."
 #

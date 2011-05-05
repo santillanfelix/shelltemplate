@@ -8,8 +8,4 @@
 # Hewlett-Packard Company
 # 
 
-. ${HOME}/.shelltemplaterc
-
-printto "Starting... "
-
 # 

@@ -8,9 +8,5 @@
 # Hewlett-Packard Company
 # 
 
-. ${HOME}/.shelltemplaterc
-. ${AP_HOME}/libutils.sh
-
-printto "Checking... "
 
 # 

@@ -8,8 +8,5 @@
 # Hewlett-Packard Company
 # 
 
-. ${HOME}/.shelltemplaterc
-
-printto "Stopping... "
 
 # 

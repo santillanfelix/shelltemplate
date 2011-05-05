@@ -1,11 +1,11 @@
 #!/bin/sh 
 # vim: set ts=2 sw=2 sts=2 si ai et: 
 
-# libutils.sh -- library with some util functions
+# libutils.sh 
 # =
 #
 # Andres Aquino <aquino(at)hp.com>
-# Hewlett-Packard Company
+# Hewlett-Packard Company | EBS
 # 
 
 #
@@ -32,7 +32,7 @@ CLTYPE="\e"
 
 #
 # get the enviroment for the SO running
-set_environment () {
+setEnvironment () {
   # terminal line settings
   stty 2> /dev/null > /dev/null 
 
@@ -180,22 +180,22 @@ set_environment () {
   esac
 
   # print a report
-  log_action "INFO" "${APNAME} starting, you're using ${APSYSO} Operating System"
-  log_action "DEBUG" ""
-  log_action "DEBUG" ""
-  log_action "DEBUG" ""
-  log_action "DEBUG" ""
-  log_action "DEBUG" ""
-  log_action "DEBUG" ""
-  log_action "DEBUG" ""
-  log_action "DEBUG" ""
-  log_action "DEBUG" ""
+  logAction "INFO" "${APNAME} starting, you're using ${APSYSO} Operating System"
+  logAction "DEBUG" ""
+  logAction "DEBUG" ""
+  logAction "DEBUG" ""
+  logAction "DEBUG" ""
+  logAction "DEBUG" ""
+  logAction "DEBUG" ""
+  logAction "DEBUG" ""
+  logAction "DEBUG" ""
+  logAction "DEBUG" ""
 }
 
 
 #
 # set Application's Name
-set_name () {
+setName () {
   local AP_NAME=${1}
   local AP_PATH=${2}
 
@@ -217,7 +217,7 @@ set_name () {
 
 #
 # set log
-set_log () {
+setLogs () {
   local AP_LOGD=${1}
 
   # log's path
@@ -235,7 +235,7 @@ set_log () {
 
 #
 # set processes
-set_proc () {
+setProcess () {
   local AP_PROC=${1}
 
   # process name
@@ -249,7 +249,7 @@ set_proc () {
 # get the process ID of an app
 #  FILTER = strings to look for in process list (ej. java | rmi;java | iplanet,cci)
 #  PROCID = IDname for process (ej. iplanets)
-get_process_id () {
+getProcessID () {
   #
   local FILTER="${1}"
   
@@ -258,20 +258,20 @@ get_process_id () {
   WRDSLIST=`echo  "${APUSER},${APFLTR}" | sed -e "s/\///g;s/,/\/\&\&\//g;s/;/\/\|\|\//g"` 
   # extraer procesos existentes y filtrar las cadenas del archivo de configuracion
   ps ${PSOPTS} > ${PIDFILE}.allps
-  log_action "DEBUG" "filtering process list with [ps ${PSOPTS}]"
-  ${VIEWMLOG} && report_status "i" "Creating of ${PIDFILE}.allps"
+  logAction "DEBUG" "filtering process list with [ps ${PSOPTS}]"
+  ${VIEWMLOG} && showStatus "i" "Creating of ${PIDFILE}.allps"
   
   # extraer los procesos que nos interesan 
   awk "/${WRDSLIST}/{print}" ${PIDFILE}.allps > ${PIDFILE}.ps
-  log_action "DEBUG" "looking for /${WRDSLIST}/ in ${PIDFILE}.allps owned by ${APUSER}"
+  logAction "DEBUG" "looking for /${WRDSLIST}/ in ${PIDFILE}.allps owned by ${APUSER}"
   
   # el archivo existe y es mayor a 0 bytes 
   if [ -s ${PIDFILE}.ps ]
   then
-    ${VIEWMLOG} && report_status "i" "${PIDFILE}.allps < /${WRDSLIST}/ = uju!"
+    ${VIEWMLOG} && showStatus "i" "${PIDFILE}.allps < /${WRDSLIST}/ = uju!"
     # extraer los procesos y reordenarlos
     sort -n -k8 ${PIDFILE}.ps > ${PIDFILE}.pss
-    log_action "DEBUG" "hey, we have one ${APPRCS} process alive in ${PIDFILE}.ps "
+    logAction "DEBUG" "hey, we have one ${APPRCS} process alive in ${PIDFILE}.ps "
     
     # extraer los pid de los procesos implicados 
     awk -v P=${PSPOS} '{print $(3+P)}' ${PIDFILE}.pss > ${PIDFILE}.pid
@@ -280,9 +280,9 @@ get_process_id () {
     awk -v P=${PSPOS} '{print $(4+P)}' ${PIDFILE}.pss | sort -rn | uniq > ${PIDFILE}.ppid
 
   else
-    ${VIEWMLOG} && report_status "i" "${PIDFILE}.allps < /${WRDSLIST}/ = dawm!"
+    ${VIEWMLOG} && showStatus "i" "${PIDFILE}.allps < /${WRDSLIST}/ = dawm!"
     # eliminar archivos ppid, en caso de que el proceso ya no exista
-    log_action "DEBUG" "hey, ${APPRCS} is not running in ${PIDFILE}.ps "
+    logAction "DEBUG" "hey, ${APPRCS} is not running in ${PIDFILE}.ps "
     rm -f ${PIDFILE}.{pid,ppid}
   fi
   rm -f ${PIDFILE}.{pss}
@@ -290,28 +290,28 @@ get_process_id () {
 
 #
 # verify the PID's for a specific process
-process_running () {
+isProcessRunning () {
   local COUNT=0
   local EACH=""
 
   # toma de base el APPRCS que se encuentra instanciada 
   PIDFILE=${APLOGT}
-  log_action "DEBUG" "looking for ${PIDFILE}.pid"
+  logAction "DEBUG" "looking for ${PIDFILE}.pid"
 
   # si no existe el PID, forzar la busqueda 
-  [ ! -s ${PIDFILE}.pid ] && get_process_id
+  [ ! -s ${PIDFILE}.pid ] && getProcessID
 
   # caso contrario, verificar que sea correcto 
   if [ -s ${PIDFILE}.pid ]
   then
     PROCESS=`head -n1 ${PIDFILE}.pid`
-    ${VIEWMLOG} && report_status "i" "${PIDFILE}.pid > [ ${PROCESS} ]"
+    ${VIEWMLOG} && showStatus "i" "${PIDFILE}.pid > [ ${PROCESS} ]"
     kill -0 ${PROCESS} > /dev/null 2>&1
     RESULT=$?
     [ ${RESULT} -ne 0 ] && STATUS="process ${APPRCS} is not running"
     [ ${RESULT} -eq 0 ] && STATUS="process ${APPRCS} is running"
-    ${VIEWMLOG} && report_status "i" "Well, ${STATUS} (kill -0 PID)"
-    log_action "DEBUG" "${STATUS}"
+    ${VIEWMLOG} && showStatus "i" "Well, ${STATUS} (kill -0 PID)"
+    logAction "DEBUG" "${STATUS}"
     return ${RESULT}
   else
     rm -f ${PIDFILE}.*
@@ -323,7 +323,7 @@ process_running () {
 
 #
 # verify the PID's for a specific process
-processes_running () {
+searchProcess () {
   local COUNT=0
   local EACH=""
 
@@ -335,7 +335,7 @@ processes_running () {
       PROCESS=`head -n1 ${PIDFILE}`
       kill -0 ${PROCESS} > /dev/null 2>&1
       RESULT=$?
-      [ ${RESULT} -ne 0 ] && log_action "DEBUG" "${PIDFILE} is not a valid process"
+      [ ${RESULT} -ne 0 ] && logAction "DEBUG" "${PIDFILE} is not a valid process"
       [ ${RESULT} -ne 0 ] && rm -f ${PIDFILE}
       return ${RESULT}
     fi
@@ -345,7 +345,7 @@ processes_running () {
 
 #
 # event log
-log_action () {
+logAction () {
   local LEVEL="${1}"
   local ACTION="${2}"
   
@@ -401,7 +401,7 @@ log_action () {
 
 #
 # show status of app execution
-report_status () {
+showStatus () {
   local STATUS="${1}"
   local MESSAGE="${2}"
   
@@ -413,13 +413,13 @@ report_status () {
     tput cuu1 && tput cuf 80
     case "${STATUS}" in
       "*")
-        printto "${CRESET}[${TXTGRN} ${STATUS} ${CRESET}]"
+        toPrint "${CRESET}[${TXTGRN} ${STATUS} ${CRESET}]"
       ;;
       "?")
-        printto "${CRESET}[${TXTRED} ${STATUS} ${CRESET}]"
+        toPrint "${CRESET}[${TXTRED} ${STATUS} ${CRESET}]"
       ;;
       "i")
-        printto "${CRESET}[${TXTYLW} ${STATUS} ${CRESET}]"
+        toPrint "${CRESET}[${TXTYLW} ${STATUS} ${CRESET}]"
       ;;
     esac
   fi
@@ -427,33 +427,33 @@ report_status () {
 
 
 #
-# filter_in_log
-filter_in_log () {
+# toSearch
+toSearch () {
   local FILTER="${1}"
   local WRDSLIST=`echo "${FILTER}" | sed -e "s/\///g;s/,/\/\&\&\//g;s/;/\/\|\|\//g"` 
 
   # la long de la cad no esta vacia
-  [ ${#FILTER} -eq 0 ] && log_action "DEBUG" "Umh, please set the filter (UP or DOWN)String"
+  [ ${#FILTER} -eq 0 ] && logAction "DEBUG" "Umh, please set the filter (UP or DOWN)String"
   [ ${#FILTER} -eq 0 ] && return 1
 
   # extraer los procesos que nos interesan 
   [ ! -f ${APLOGP}.log ] && touch ${APLOGP}.log
   cut -c1-160 ${APLOGP}.log | awk "BEGIN{res=0}/${WRDSLIST}/{res=1}END{if(res==0){exit 1}}"
   LASTSTATUS=$?
-  log_action "DEBUG" "ok, searching /${WRDSLIST}/ in ${APLOGP}.log: ${LASTSTATUS}"
+  logAction "DEBUG" "ok, searching /${WRDSLIST}/ in ${APLOGP}.log: ${LASTSTATUS}"
   
   if [ ${LASTSTATUS} -eq 0 ]
   then
-    log_action "DEBUG" "search of /${FILTER}/ was succesfull"
+    logAction "DEBUG" "search of /${FILTER}/ was succesfull"
   else
-    log_action "DEBUG" "search of /${FILTER}/ was failed"
+    logAction "DEBUG" "search of /${FILTER}/ was failed"
   fi
 
   return ${LASTSTATUS}
 }
 
 
-printto() {
+toPrint () {
   local message="$1"
 
   _echo=`which echo`
@@ -479,7 +479,7 @@ printto() {
 
 #
 # waiting process indicator
-wait_for () {
+statusWaiting () {
   local WAITSTR="- \ | / "
   local STATUS=${1}
   local TIMETO=${2}
@@ -493,7 +493,7 @@ wait_for () {
     if [ "${STATUS}" != "CLEAR" ]
     then
       TIMETO=$((${TIMETO}*5))
-      printto " >>${STATUS} " | awk '{print substr($0"                                                                                        ",1,80)}'
+      toPrint " >>${STATUS} " | awk '{print substr($0"                                                                                        ",1,80)}'
       tput sc
       CHARPOS=1
       while(${GOON})
@@ -502,7 +502,7 @@ wait_for () {
         # recuperar la posicion en pantalla, ubicar en la columna 70 y subirse un renglon 
         tput rc
         tput cuu1 && tput cuf 80 
-        printto "${CRESET}[${TXTYLW} ${WAITCHAR} ${CRESET}]"
+        toPrint "${CRESET}[${TXTYLW} ${WAITCHAR} ${CRESET}]"
         # incrementar posicion, si es igual a 5 regresar al primer caracter 
         CHARPOS=$((${CHARPOS}+1))
         [ ${CHARPOS} -eq 5 ] && CHARPOS=1
@@ -531,19 +531,30 @@ wait_for () {
   fi
 }
 
-#
-# functions
 # use openssl for encrypt/decrypt information
-get_user () {
+getUser () {
   info=`openssl enc -d -aes256 -salt -pass file:${APKEYF} -in ${APHOME}/${1}`
   echo ${info%@*}
 
 }
 
-get_password () {
+getPassword () {
   info=`openssl enc -d -aes256 -salt -pass file:${APKEYF} -in ${APHOME}/${1}`
   echo ${info#*@}
 
 }
+
+java16 () {
+  PATH=/opt/java6/bin:${PATH}
+}
+
+java15 () {
+  PATH=/opt/java1.5/bin:${PATH}
+}
+
+java14 () {
+  PATH=/opt/java1.4/bin:${PATH}
+}
+
 
 #

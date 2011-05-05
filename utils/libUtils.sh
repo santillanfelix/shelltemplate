@@ -101,6 +101,9 @@ setEnvironment () {
   fi
   [ ! -d ${APPATH} ] && mkdir -p ${APPATH}
   [ -s ${APPATH}/PROFILE ] && APPROF="`cat ${APPATH}/PROFILE`" || APPROF="(c) Andres Aquino <andres.aquino(at)gmail.com>"
+  
+  # config 
+  [ -d ${APPATH}/conf ] && APCONF=${APPATH}/conf || APCONF=${APPATH}
 
   # log's path
   if [ ${#APLOGD} -eq 0 ]
@@ -114,7 +117,7 @@ setEnvironment () {
   [ ! -d ${APTEMP} ] && mkdir -p ${APTEMP}
 
   # key file to cipher/decipher information
-  APKEYF="${APHOME}/${APNAME}.key"
+  APKEYF="${APCONF}/${APNAME}.key"
   
   HOSTNAME=`hostname`
   case "${APSYSO}" in
@@ -180,16 +183,7 @@ setEnvironment () {
   esac
 
   # print a report
-  logAction "INFO" "${APNAME} starting, you're using ${APSYSO} Operating System"
-  logAction "DEBUG" ""
-  logAction "DEBUG" ""
-  logAction "DEBUG" ""
-  logAction "DEBUG" ""
-  logAction "DEBUG" ""
-  logAction "DEBUG" ""
-  logAction "DEBUG" ""
-  logAction "DEBUG" ""
-  logAction "DEBUG" ""
+  logAction "DEBUG" "${APNAME} starting, you're using ${APSYSO} Operating System"
 }
 
 
@@ -359,6 +353,7 @@ logAction () {
     PID=`head -n1 ${APLOGP}.pid`
   fi
     
+  # TODO
   # severity level: http://www.aboutdebian.com/syslog.htm
   # do you need make something for whatever level on your app ? 
   LOGTHIS=false
@@ -368,22 +363,21 @@ logAction () {
     ;;
     "EMERG"|"CRIT"|"ERR")
       LOGTHIS=true
+      showStatus "?" "${ACTION}"
     ;;
     "WARN")
       [ ${APLEVL} = "WARN" ] && LOGTHIS=true
-      [ ${APLEVL} = "NOTICE" ] && LOGTHIS=true
     ;;
     "NOTICE")
-      [ ${APLEVL} = "NOTICE" ] && LOGTHIS=true
-      [ ${APLEVL} = "DEBUG" ] && LOGTHIS=true
+      [ ${APLEVL} = "NOTICE" ] || [ ${APLEVL} = "DEBUG" ] && LOGTHIS=true
+      showStatus "i" "${ACTION}"
     ;;
     "DEBUG")
       [ ${APLEVL} = "DEBUG" ] && LOGTHIS=true
     ;;
     "INFO")
-      [ ${APLEVL} = "INFO" ] && LOGTHIS=true
-      [ ${APLEVL} = "NOTICE" ] && LOGTHIS=true
-      [ ${APLEVL} = "DEBUG" ] && LOGTHIS=true
+      [ ${APLEVL} = "INFO" ] || [ ${APLEVL} = "DEBUG" ] && LOGTHIS=true
+      showStatus "*" "${ACTION}"
     ;;
   esac 
   
@@ -533,27 +527,17 @@ statusWaiting () {
 
 # use openssl for encrypt/decrypt information
 getUser () {
-  info=`openssl enc -d -aes256 -salt -pass file:${APKEYF} -in ${APHOME}/${1}`
+  info=`openssl enc -d -aes256 -salt -pass file:${APKEYF} -in ${APCONF}/${1}`
+  logAction "DEBUG" "Getting password from "
   echo ${info%@*}
 
 }
 
 getPassword () {
-  info=`openssl enc -d -aes256 -salt -pass file:${APKEYF} -in ${APHOME}/${1}`
+  info=`openssl enc -d -aes256 -salt -pass file:${APKEYF} -in ${APCONF}/${1}`
+  logAction "DEBUG" "Getting password from "
   echo ${info#*@}
 
-}
-
-java16 () {
-  PATH=/opt/java6/bin:${PATH}
-}
-
-java15 () {
-  PATH=/opt/java1.5/bin:${PATH}
-}
-
-java14 () {
-  PATH=/opt/java1.4/bin:${PATH}
 }
 
 
